@@ -1,0 +1,31 @@
+name: FeatureRollout
+
+on:
+  push:
+    paths: ['FlagControl/**', '.github/workflows/feature-rollout.yml']
+  pull_request:
+    paths: ['FlagControl/**', '.github/workflows/feature-rollout.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: FlagControl
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: FlagControl/global.json
+      - run: dotnet restore
+      - run: dotnet build -c Release --no-restore
+      - run: dotnet format --verify-no-changes --no-restore
+      - run: dotnet test -c Release --no-build
+      - run: dotnet pack src/FeatureRollout.Sdk -c Release --no-build -o artifacts/packages
+      - run: dotnet restore demo/FeatureRollout.Demo --source ./artifacts/packages --packages ./artifacts/demo-cache
+      - run: dotnet build demo/FeatureRollout.Demo -c Release --no-restore
+      - run: dotnet format demo/FeatureRollout.Demo --verify-no-changes --no-restore
+      - run: pwsh -File demo/check-buckets.ps1

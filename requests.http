@@ -1,0 +1,45 @@
+@base = http://localhost:5080
+@token = flagcontrol-demo-token
+
+PUT {{base}}/v1/admin/environments/demo
+Authorization: Bearer {{token}}
+
+###
+
+POST {{base}}/v1/admin/environments/demo/publications
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "expectedRevision": 0,
+  "flags": {
+    "checkout": {
+      "default": false,
+      "rolloutPercent": 10,
+      "overrides": {"preview-user": true, "legacy-user": false},
+      "rules": [{"attribute": "tier", "equalsValue": "staff", "enabled": true}]
+    }
+  }
+}
+
+###
+
+GET {{base}}/v1/config/demo
+
+###
+
+GET {{base}}/v1/admin/environments/demo/history
+Authorization: Bearer {{token}}
+
+###
+
+GET {{base}}/v1/admin/environments/demo/publications/1
+Authorization: Bearer {{token}}
+
+###
+
+GET {{base}}/health
+
+###
+
+GET {{base}}/openapi/v1.json

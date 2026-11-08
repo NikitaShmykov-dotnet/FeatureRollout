@@ -1,0 +1,7 @@
+bin/
+obj/
+artifacts/
+.local/
+.env
+TestResults/
+.vs/

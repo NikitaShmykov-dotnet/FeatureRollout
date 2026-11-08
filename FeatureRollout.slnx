@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FeatureRollout.Api/FeatureRollout.Api.csproj" />
+    <Project Path="src/FeatureRollout.Sdk/FeatureRollout.Sdk.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FeatureRollout.Tests/FeatureRollout.Tests.csproj" />
+  </Folder>
+</Solution>
